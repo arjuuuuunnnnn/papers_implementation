@@ -5,10 +5,10 @@ from tokenizers.normalizers import Lowercase, NFD, StripAccents
 from tokenizers.trainers import BpeTrainer, WordLevelTrainer
 from tokenizers.models import WordLevel, BPE
 from tokenizers.pre_tokenizers import Whitespace,WhitespaceSplit
-
+from transformers import AutoTokenizer # for kannada
 
 def get_tokenizer_bpe(data, vocab_size):
-    # Configure tokenizer
+    # for English
     tokenizer = Tokenizer(BPE(unk_token="[UNK]"))
     tokenizer.normalizer=normalizers.Sequence([NFD(),StripAccents(), Lowercase()])
     tokenizer.pre_tokenizer = Whitespace()
@@ -35,7 +35,7 @@ def get_tokenizer_bpe(data, vocab_size):
     return tokenizer
 
 def get_tokenizer_wordlevel(data, vocab_size):
-    # Configure tokenizer
+    # Configure tokenizer for English
     tokenizer = Tokenizer(WordLevel(unk_token="[UNK]"))
     tokenizer.normalizer=normalizers.Sequence([NFD(),StripAccents(), Lowercase()])
     tokenizer.pre_tokenizer = WhitespaceSplit()
@@ -61,3 +61,10 @@ def get_tokenizer_wordlevel(data, vocab_size):
     )
 
     return tokenizer
+
+def get_kannada_tokenizer(model_name):
+    # using pretrained
+    kannada_tokenizer = AutoTokenizer.from_pretrained(model_name)
+    return kannada_tokenizer
+
+
