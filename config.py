@@ -104,6 +104,8 @@ unofficial_overfit_cpu_config=dict(
     LABEL_SMOOTHING=0.1,
 )
 
+# add new things here
+
 configs={
     'unofficial_single_gpu_config': unofficial_single_gpu_config,
     'unofficial_overfit_single_gpu_config': unofficial_overfit_single_gpu_config,

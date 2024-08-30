@@ -226,7 +226,7 @@ def get_translation_dataloaders(
     data_dir,
     src_vocab_size,
     src_tokenizer_type,
-    trg_tokenizer_model_name,
+    trg_vocab_size,
     tokenizer_save_pth,
     test_proportion,
     batch_size,
