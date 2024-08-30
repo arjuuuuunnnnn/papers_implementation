@@ -50,15 +50,28 @@ class TrainingApp:
 
     def main(self):
 
+        # train_dl, val_dl = get_translation_dataloaders(
+        #     dataset_size=wandb.config.DATASET_SIZE,
+        #     vocab_size=wandb.config.VOCAB_SIZE,
+        #     tokenizer_save_pth=os.path.join(wandb.config.RUNS_FOLDER_PTH,wandb.config.RUN_NAME,'tokenizer.json'),
+        #     tokenizer_type=wandb.config.TOKENIZER_TYPE,
+        #     batch_size=wandb.config.BATCH_SIZE,
+        #     report_summary=True,
+        #     max_seq_len=wandb.config.MAX_SEQ_LEN,
+        #     test_proportion=wandb.config.TEST_PROPORTION,
+        # )
+
         train_dl, val_dl = get_translation_dataloaders(
-            dataset_size=wandb.config.DATASET_SIZE,
-            vocab_size=wandb.config.VOCAB_SIZE,
-            tokenizer_save_pth=os.path.join(wandb.config.RUNS_FOLDER_PTH,wandb.config.RUN_NAME,'tokenizer.json'),
-            tokenizer_type=wandb.config.TOKENIZER_TYPE,
-            batch_size=wandb.config.BATCH_SIZE,
+            data_dir='data/',
+            src_vocab_size=30000,
+            src_tokenizer_type='bpe',
+            trg_tokenizer_model_name='ai4bharat/indic-bert',  # or any other appropriate Kannada tokenizer
+            tokenizer_save_pth='tokenizers/en_kn',
+            test_proportion=0.1,
+            batch_size=64,
+            max_seq_len=128,
             report_summary=True,
-            max_seq_len=wandb.config.MAX_SEQ_LEN,
-            test_proportion=wandb.config.TEST_PROPORTION,
+            example_cnt=None  # Set a number if you want to limit the dataset size
         )
 
         model = MachineTranslationTransformer(
