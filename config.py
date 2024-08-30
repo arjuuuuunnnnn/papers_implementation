@@ -105,6 +105,33 @@ unofficial_overfit_cpu_config=dict(
 )
 
 # add new things here
+"""
+def get_translation_dataloaders(
+
+    data_dir,
+
+    src_vocab_size,
+
+    src_tokenizer_type,
+
+    trg_vocab_size,
+
+    tokenizer_save_pth,
+
+    test_proportion,
+
+    batch_size,
+
+    max_seq_len,
+
+    report_summary,
+
+    example_cnt=None
+
+):"""
+
+
+
 
 configs={
     'unofficial_single_gpu_config': unofficial_single_gpu_config,
