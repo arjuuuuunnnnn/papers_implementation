@@ -1,0 +1,6 @@
+2024-08-31 21:25:57,334 INFO     pid:18826 __main__:039:__init__    ----- Training Started -----
+2024-08-31 21:25:57,335 INFO     pid:18826 __main__:048:__init__    Device name is CPU
+2024-08-31 21:30:01,677 INFO     pid:19340 __main__:039:__init__    ----- Training Started -----
+2024-08-31 21:30:01,678 INFO     pid:19340 __main__:048:__init__    Device name is CPU
+2024-08-31 21:32:52,056 INFO     pid:19832 __main__:039:__init__    ----- Training Started -----
+2024-08-31 21:32:52,056 INFO     pid:19832 __main__:048:__init__    Device name is CPU
