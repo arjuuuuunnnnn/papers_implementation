@@ -40,7 +40,7 @@ class TransformerEncoderBlock(nn.Module):
 
 
 class TransformerEncoder(nn.Module):
-    def __init__(self, n_blocks, n_heads, d_model, d_ff, dropout_proba=0.1)
+    def __init__(self, n_blocks, n_heads, d_model, d_ff, dropout_proba=0.1):
         super(TransformerEncoder, self).__init__()
         self.encoder_blocks = nn.ModuleList([TransformerEncoderBlock(d_model, n_heads, d_ff, dropout_proba) for _ in range(n_blocks)])
 

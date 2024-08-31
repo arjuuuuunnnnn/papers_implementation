@@ -1,8 +1,8 @@
 import torch.nn as nn
 
-from transformer_encoder import TransformerEncoder
-from transformer_decoder import TransformerDecoder
-from positional-encoding import PositionalEncoding
+from .transformer_encoder import TransformerEncoder
+from .transformer_decoder import TransformerDecoder
+from .positional_encoding import PositionalEncoding
 
 import math
 
