@@ -269,15 +269,3 @@ def get_translation_dataloaders(
 
     return train_dl, val_dl
 
-# train_dataloader, val_dataloader = get_translation_dataloaders(
-#     data_dir='data/',
-#     src_vocab_size=30000,
-#     src_tokenizer_type='bpe',
-#     trg_tokenizer_model_name='ai4bharat/indic-bert',  # or any other appropriate Kannada tokenizer
-#     tokenizer_save_pth='tokenizers/en_kn',
-#     test_proportion=0.1,
-#     batch_size=64,
-#     max_seq_len=128,
-#     report_summary=True,
-#     example_cnt=None  # Set to a number if you want to limit the dataset size
-# )

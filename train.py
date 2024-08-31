@@ -11,7 +11,7 @@ from learner import Learner
 from scheduler import CustomScheduler
 from dataset import get_translation_dataloaders
 from callbacks import CheckpointSaver, MoveToDeviceCallback, TrackLoss, TrackExample, TrackBleu
-from architectures.machine_translation_transformer import MachineTranslationTransformer
+from src.translation_transformer import TranslationTransformer
 
 # Initialize configuration
 import wandb
@@ -65,7 +65,7 @@ class TrainingApp:
             data_dir='data/',
             src_vocab_size=30000,
             src_tokenizer_type='bpe',
-            trg_tokenizer_model_name='ai4bharat/indic-bert',  # or any other appropriate Kannada tokenizer
+            trg_tokenizer_model_name='ai4bharat/indictrans2-indic-en-1B',
             tokenizer_save_pth='tokenizers/en_kn',
             test_proportion=0.1,
             batch_size=64,
@@ -74,7 +74,7 @@ class TrainingApp:
             example_cnt=None  # Set a number if you want to limit the dataset size
         )
 
-        model = MachineTranslationTransformer(
+        model = TranslationTransformer(
             d_model=wandb.config.D_MODEL,
             n_blocks=wandb.config.N_BLOCKS,
             src_vocab_size=wandb.config.VOCAB_SIZE,

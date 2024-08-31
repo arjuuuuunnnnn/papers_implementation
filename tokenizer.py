@@ -64,7 +64,7 @@ def get_tokenizer_wordlevel(data, vocab_size):
 
 def get_kannada_tokenizer(model_name):
     # using pretrained
-    kannada_tokenizer = AutoTokenizer.from_pretrained(model_name)
+    kannada_tokenizer = AutoTokenizer.from_pretrained(model_name, trust_remote_code=True)
     return kannada_tokenizer
 
 
