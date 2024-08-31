@@ -2,7 +2,7 @@ unofficial_single_gpu_config=dict(
     # RUN CONFIG:
     RUN_NAME='unofficial_single_gpu_run',
     RUN_DESCRIPTION='default : GPU, NVRAM >= 10GB',
-    RUNS_FOLDER_PTH='../runs',
+    RUNS_FOLDER_PTH='./runs',
     # DATA CONFIG:
     DATASET_SIZE=300000,
     TEST_PROPORTION=0.001,
@@ -39,7 +39,7 @@ unofficial_overfit_single_gpu_config=dict(
         This is useful when debugging.
         For better results change the scheduler in train.py.
     """,
-    RUNS_FOLDER_PTH='../runs',
+    RUNS_FOLDER_PTH='./runs',
     # DATA CONFIG:
     DATASET_SIZE=2, 
     TEST_PROPORTION=0.5,
@@ -75,7 +75,7 @@ unofficial_overfit_cpu_config=dict(
         It is useful when debugging.
         For better results change the scheduler in train.py.
         """,
-    RUNS_FOLDER_PTH='../runs',
+    RUNS_FOLDER_PTH='./runs',
     # DATA CONFIG:
     DATASET_SIZE=2,
     TEST_PROPORTION=0.5,
@@ -112,7 +112,7 @@ cpu_configs=dict(
         It is useful when debugging.
         For better results change the scheduler in train.py.
         """,
-    RUNS_FOLDER_PTH='../runs',
+    RUNS_FOLDER_PTH='./runs',
     # DATA CONFIG:
     DATASET_SIZE=2,
     TEST_PROPORTION=0.5,
