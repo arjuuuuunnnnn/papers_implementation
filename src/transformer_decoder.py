@@ -1,9 +1,9 @@
 import torch.nn as nn
 import os
 
-from multi_head_attention import MultiHeadAttention
-from add_and_norm import AddAndNorm
-from feed_forward import PositionWiseFeedForward
+from .multi_head_attention import MultiHeadAttention
+from .add_and_norm import AddAndNorm
+from .feed_forward import PositionWiseFeedForward
 
 class TransformerDecoderBlock(nn.Module):
     def __init__(self, d_model, n_heads, dropout_proba):

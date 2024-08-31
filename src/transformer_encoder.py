@@ -1,8 +1,8 @@
 import torch.nn as nn
 
-from feed_forward import PositionWiseFeedForward
-from multi_head_attention import MultiHeadAttention
-from add_and_norm import AddAndNorm
+from .feed_forward import PositionWiseFeedForward
+from .multi_head_attention import MultiHeadAttention
+from .add_and_norm import AddAndNorm
 
 class TransformerEncoderBlock(nn.Module):
     def __init__(self, d_model, n_heads, d_ff, dropout_proba):
