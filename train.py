@@ -1,21 +1,22 @@
 import os
+import random
+import numpy as np
 import torch
 import torch.nn as nn
 import torch.optim as optim
 import wandb
 from config import configs
+
+# Initialize wandb first
+config_name = 'cpu_configs'  # CHANGE
+wandb.init(config=configs[config_name], project="attention-is-all-you-need-paper", entity="bkoch4142")
+
 from learner import Learner
 from scheduler import CustomScheduler
 from dataset import get_translation_dataloaders
 from callbacks import CheckpointSaver, MoveToDeviceCallback, TrackLoss, TrackExample, TrackBleu
 from src.translation_transformer import TranslationTransformer
 from utils.logconf import logging
-import numpy as np
-import random
-
-
-config_name='cpu_configs' # CHANGE
-wandb.init(config=configs[config_name],project="attention-is-all-you-need-paper", entity="bkoch4142")
 
 # Configure Logging
 log = logging.getLogger(__name__)

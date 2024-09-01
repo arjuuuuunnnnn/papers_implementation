@@ -208,12 +208,12 @@ def preprocess_data(data, src_tokenizer, trg_tokenizer, max_seq_len, test_propor
     tokenized_data = []
     for src, trg in data:
         src_encoded = src_tokenizer.encode(src).ids
-        trg_encoded = trg_tokenizer.encode(trg).input_ids
+        trg_encoded = trg_tokenizer.encode(trg)
         if len(src_encoded) <= max_seq_len and len(trg_encoded) <= max_seq_len:
             tokenized_data.append((src_encoded, trg_encoded))
 
     # Shuffle and split the data
-    random.shuffle(tokenized_data)
+    # random.shuffle(tokenized_data)
     split_index = int(len(tokenized_data) * (1 - test_proportion))
     train_data = tokenized_data[:split_index]
     test_data = tokenized_data[split_index:]
