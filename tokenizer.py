@@ -2,81 +2,36 @@ from tokenizers import Tokenizer
 from tokenizers.processors import TemplateProcessing
 from tokenizers import normalizers
 from tokenizers.normalizers import Lowercase, NFD, StripAccents
-from tokenizers.trainers import BpeTrainer, WordLevelTrainer
-from tokenizers.models import WordLevel, BPE
-from tokenizers.pre_tokenizers import Whitespace,WhitespaceSplit
-from transformers import AutoTokenizer # for kannada
+from tokenizers.trainers import BpeTrainer
+from tokenizers.models import BPE
+from tokenizers.pre_tokenizers import Whitespace
+from transformers import AutoTokenizer
 
-def get_tokenizer_bpe(data, vocab_size):
-    # for English
+def get_english_tokenizer(data, vocab_size):
     tokenizer = Tokenizer(BPE(unk_token="[UNK]"))
-    tokenizer.normalizer=normalizers.Sequence([NFD(),StripAccents(), Lowercase()])
+    tokenizer.normalizer = normalizers.Sequence([NFD(), StripAccents(), Lowercase()])
     tokenizer.pre_tokenizer = Whitespace()
-    trainer_src = BpeTrainer(vocab_size=vocab_size, special_tokens=["[PAD]", "[UNK]", "[BOS]","[EOS]"])
+    trainer = BpeTrainer(vocab_size=vocab_size, special_tokens=["[PAD]", "[UNK]", "[BOS]", "[EOS]"])
 
-    # Configure batch iterators to train tokenizers from memory
-    # def batch_iterator_src(batch_size=10000):
-    #     for i in range(0, len(data), batch_size):
-    #         yield data[i : i + batch_size]['translation_src']
-    #     for i in range(0, len(data), batch_size):
-    #         yield data[i : i + batch_size]['translation_trg']
-
-    def batch_iterator_src(batch_size=10000):
+    def batch_iterator(batch_size=10000):
         for i in range(0, len(data), batch_size):
-            yield [item[0] for item in data[i : i + batch_size]]  
-        for i in range(0, len(data), batch_size):
-            yield [item[1] for item in data[i : i + batch_size]]
+            yield [item[0] for item in data[i : i + batch_size]]  # Only English
 
-    # Train tokenizers
-    tokenizer.train_from_iterator(batch_iterator_src(), trainer=trainer_src, length=len(data))
-
-    # Configure postprocessing to add [BOS] and [EOS] tokens to sequences
+    tokenizer.train_from_iterator(batch_iterator(), trainer=trainer, length=len(data))
+    
     tokenizer.post_processor = TemplateProcessing(
         single="[BOS] $A [EOS]",
         special_tokens=[
-            ("[BOS]", 2),
-            ("[EOS]", 3),
+            ("[BOS]", tokenizer.token_to_id("[BOS]")),
+            ("[EOS]", tokenizer.token_to_id("[EOS]")),
         ],
     )
-    return tokenizer
-
-def get_tokenizer_wordlevel(data, vocab_size):
-    # Configure tokenizer for English
-    tokenizer = Tokenizer(WordLevel(unk_token="[UNK]"))
-    tokenizer.normalizer=normalizers.Sequence([NFD(),StripAccents(), Lowercase()])
-    tokenizer.pre_tokenizer = WhitespaceSplit()
-    trainer_src = WordLevelTrainer(vocab_size=vocab_size, special_tokens=["[PAD]", "[UNK]", "[BOS]","[EOS]"]) 
-
-    # Configure batch iterators to train tokenizers from memory
-    # def batch_iterator_src(batch_size=10000):
-    #     for i in range(0, len(data), batch_size):
-    #         yield data[i : i + batch_size]['translation_src']
-    #     for i in range(0, len(data), batch_size):
-    #         yield data[i : i + batch_size]['translation_trg']
-
-    def batch_iterator_src(batch_size=10000):
-        for i in range(0, len(data), batch_size):
-            yield [item[0] for item in data[i : i + batch_size]]  
-        for i in range(0, len(data), batch_size):
-            yield [item[1] for item in data[i : i + batch_size]]
-
-    # Train tokenizers
-    tokenizer.train_from_iterator(batch_iterator_src(), trainer=trainer_src, length=len(data))
-
-    # Configure postprocessing to add [BOS] and [EOS] tokens to trg sequence
-    tokenizer.post_processor = TemplateProcessing(
-        single="[BOS] $A [EOS]",
-        special_tokens=[
-            ("[BOS]", 2),
-            ("[EOS]", 3),
-        ],
-    )
-
     return tokenizer
 
 def get_kannada_tokenizer(model_name):
-    # using pretrained
-    kannada_tokenizer = AutoTokenizer.from_pretrained(model_name, trust_remote_code=True)
-    return kannada_tokenizer
+    return AutoTokenizer.from_pretrained(model_name, trust_remote_code=True)
 
-
+def get_translation_tokenizers(data, english_vocab_size, kannada_model_name):
+    english_tokenizer = get_english_tokenizer(data, english_vocab_size)
+    kannada_tokenizer = get_kannada_tokenizer(kannada_model_name)
+    return english_tokenizer, kannada_tokenizer
