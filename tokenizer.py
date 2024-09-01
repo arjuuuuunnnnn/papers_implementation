@@ -15,11 +15,17 @@ def get_tokenizer_bpe(data, vocab_size):
     trainer_src = BpeTrainer(vocab_size=vocab_size, special_tokens=["[PAD]", "[UNK]", "[BOS]","[EOS]"])
 
     # Configure batch iterators to train tokenizers from memory
+    # def batch_iterator_src(batch_size=10000):
+    #     for i in range(0, len(data), batch_size):
+    #         yield data[i : i + batch_size]['translation_src']
+    #     for i in range(0, len(data), batch_size):
+    #         yield data[i : i + batch_size]['translation_trg']
+
     def batch_iterator_src(batch_size=10000):
         for i in range(0, len(data), batch_size):
-            yield data[i : i + batch_size]['translation_src']
+            yield [item[0] for item in data[i : i + batch_size]]  
         for i in range(0, len(data), batch_size):
-            yield data[i : i + batch_size]['translation_trg']
+            yield [item[1] for item in data[i : i + batch_size]]
 
     # Train tokenizers
     tokenizer.train_from_iterator(batch_iterator_src(), trainer=trainer_src, length=len(data))
@@ -42,11 +48,17 @@ def get_tokenizer_wordlevel(data, vocab_size):
     trainer_src = WordLevelTrainer(vocab_size=vocab_size, special_tokens=["[PAD]", "[UNK]", "[BOS]","[EOS]"]) 
 
     # Configure batch iterators to train tokenizers from memory
+    # def batch_iterator_src(batch_size=10000):
+    #     for i in range(0, len(data), batch_size):
+    #         yield data[i : i + batch_size]['translation_src']
+    #     for i in range(0, len(data), batch_size):
+    #         yield data[i : i + batch_size]['translation_trg']
+
     def batch_iterator_src(batch_size=10000):
         for i in range(0, len(data), batch_size):
-            yield data[i : i + batch_size]['translation_src']
+            yield [item[0] for item in data[i : i + batch_size]]  
         for i in range(0, len(data), batch_size):
-            yield data[i : i + batch_size]['translation_trg']
+            yield [item[1] for item in data[i : i + batch_size]]
 
     # Train tokenizers
     tokenizer.train_from_iterator(batch_iterator_src(), trainer=trainer_src, length=len(data))
