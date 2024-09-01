@@ -15,7 +15,7 @@ def get_english_tokenizer(data, vocab_size):
 
     def batch_iterator(batch_size=10000):
         for i in range(0, len(data), batch_size):
-            yield [item[0] for item in data[i : i + batch_size]]  # Only English
+            yield data[i : i + batch_size]
 
     tokenizer.train_from_iterator(batch_iterator(), trainer=trainer, length=len(data))
     
