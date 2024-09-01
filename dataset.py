@@ -203,12 +203,18 @@ def get_data(data_dir, example_cnt=None):
     
     return list(zip(src_data, trg_data))
 
+max_seq_len = 256
+
 def preprocess_data(data, src_tokenizer, trg_tokenizer, max_seq_len, test_proportion):
     # Tokenize
     tokenized_data = []
     for src, trg in data:
         src_encoded = src_tokenizer.encode(src).ids
         trg_encoded = trg_tokenizer.encode(trg)
+
+        # Truncate sequences if they exceed max_seq_len
+        src_encoded = src_encoded[:max_seq_len]
+        trg_encoded = trg_encoded[:max_seq_len]
         if len(src_encoded) <= max_seq_len and len(trg_encoded) <= max_seq_len:
             tokenized_data.append((src_encoded, trg_encoded))
 
