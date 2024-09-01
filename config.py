@@ -1,4 +1,4 @@
-unofficial_single_gpu_config=dict(
+single_gpu_config=dict(
     # RUN CONFIG:
     RUN_NAME='unofficial_single_gpu_run',
     RUN_DESCRIPTION='default : GPU, NVRAM >= 10GB',
@@ -31,7 +31,7 @@ unofficial_single_gpu_config=dict(
     LABEL_SMOOTHING=0.1,
 )
 
-unofficial_overfit_single_gpu_config=dict(
+overfit_single_gpu_config=dict(
     # RUN CONFIG:
     RUN_NAME='unofficial_overfit_gpu_run',
     RUN_DESCRIPTION="""
@@ -66,8 +66,8 @@ unofficial_overfit_single_gpu_config=dict(
     DEVICE='gpu',
     LABEL_SMOOTHING=0.1,
 )
- 
-unofficial_overfit_cpu_config=dict(
+
+overfit_cpu_config=dict(
     # RUN CONFIG:
     RUN_NAME='unofficial_overfit_cpu_run',
     RUN_DESCRIPTION="""
@@ -144,8 +144,8 @@ cpu_configs=dict(
 
 
 configs={
-    'unofficial_single_gpu_config': unofficial_single_gpu_config,
-    'unofficial_overfit_single_gpu_config': unofficial_overfit_single_gpu_config,
-    'unofficial_overfit_cpu_config': unofficial_overfit_cpu_config,
+    'single_gpu_config': single_gpu_config,
+    'overfit_single_gpu_config': overfit_single_gpu_config,
+    'overfit_cpu_config': overfit_cpu_config,
     'cpu_configs': cpu_configs,
 }
