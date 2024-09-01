@@ -32,6 +32,8 @@ random.seed(0)
 import numpy as np
 np.random.seed(0)
 
+os.makedirs('tokenizers', exist_ok=True)
+
 
 class TrainingApp:
     def __init__(self):
