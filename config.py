@@ -117,7 +117,7 @@ cpu_configs=dict(
     DATASET_SIZE=2,
     TEST_PROPORTION=0.5,
     MAX_SEQ_LEN=100,
-    VOCAB_SIZE=100,
+    VOCAB_SIZE=100, # 32000
     TOKENIZER_TYPE='wordlevel', 
     # TRAINING CONFIG:
     BATCH_SIZE=1, 
