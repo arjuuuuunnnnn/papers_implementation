@@ -18,7 +18,7 @@ class EncoderLayer(nn.Module):
     def forward(self, x, mask=None):
         self_attn_op = self.self_attn(k=x, q=x, v=x, mask=mask)
         add_and_norm1_op = self.add_and_norm1(mha=self_attn_op, res=x)
-        feed_forward_op = self.feed_forward(x=add_and_norm)
+        feed_forward_op = self.feed_forward(x=add_and_norm1_op)
         add_and_norm2_op = self.add_and_norm2(mha=feed_forward_op, res=add_and_norm1_op)
         return add_and_norm2_op
 
