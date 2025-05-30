@@ -45,5 +45,5 @@ class MultiHeadAttention(nn.Module):
 
         output_context = self.w_o(context)
 
-        return output_context, attn_scores
+        return output_context
 
