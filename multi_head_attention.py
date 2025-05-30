@@ -30,8 +30,6 @@ class MultiHeadAttention(nn.Module):
         q_h = self.split_heads(q)
         v_h = self.split_heads(v)
 
-        batch_size, seq_length, _ = k.size()
-
         scores = (q_h @ k_h.transpose(-2, -1)) / (self.head_dim)
 
         if mask is not None:
