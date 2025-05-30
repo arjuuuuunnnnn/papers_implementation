@@ -1,5 +1,2 @@
-/data
-/__pycache__/
-/wandb/
-/runs/
-/tokenizers/
+test.py
+__pycache__/
