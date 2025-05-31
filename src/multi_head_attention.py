@@ -1,6 +1,7 @@
 import torch
 import torch.nn as nn
 import torch.nn.functional as F
+import math
 
 class MultiHeadAttention(nn.Module):
     def __init__(self, dropout=0.1, d_model=512, num_heads=8):
@@ -24,23 +25,25 @@ class MultiHeadAttention(nn.Module):
         return x
 
     def forward(self, k, q, v, mask=None):
+        print(f"Input shapes - Key: {k.shape}, Query: {q.shape}, Value: {v.shape}")
         k = self.w_k(k)
         q = self.w_q(q)
         v = self.w_v(v)
+        print(f"Transformed shapes - Key: {k.shape}, Query: {q.shape}, Value: {v.shape}")
 
         k_h = self.split_heads(k)
         q_h = self.split_heads(q)
         v_h = self.split_heads(v)
+        print(f"Split heads shapes - Key: {k_h.shape}, Query: {q_h.shape}, Value: {v_h.shape}")
 
-        scores = (q_h @ k_h.transpose(-2, -1)) / (self.head_dim)
+        scores = (q_h @ k_h.transpose(-2, -1)) / (math.sqrt(self.head_dim))
 
         print(f"Scores shape: {scores.shape}")
-        print(f"Key shape: {k_h.shape}")
 
         if mask is not None:
-            print(f"Mask shape: {mask.shape}")
+            print(f"Original Mask shape: {mask.shape}")
             if mask.dim() == 2: # [seq_len, seq_len] -> [1, 1, seq_len, seq_len]
-                mask = mask.unsqueeze(1).unsqueeze(1)
+                mask = mask.unsqueeze(0).unsqueeze(0)
                 print(f"Masked scores shape2: {scores.shape}")
             elif mask.dim() == 3: # [batch_size, seq_len, seq_len] -> [batch_size, 1, seq_len, seq_len]
                 mask = mask.unsqueeze(1)
@@ -59,4 +62,5 @@ class MultiHeadAttention(nn.Module):
         output_context = self.w_o(context)
 
         return output_context
+
 
