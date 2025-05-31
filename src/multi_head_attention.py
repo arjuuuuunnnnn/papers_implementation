@@ -44,10 +44,10 @@ class MultiHeadAttention(nn.Module):
             print(f"Original Mask shape: {mask.shape}")
             if mask.dim() == 2: # [seq_len, seq_len] -> [1, 1, seq_len, seq_len]
                 mask = mask.unsqueeze(0).unsqueeze(0)
-                print(f"Masked scores shape2: {scores.shape}")
+                print(f"Masked scores shape2: {mask.shape}")
             elif mask.dim() == 3: # [batch_size, seq_len, seq_len] -> [batch_size, 1, seq_len, seq_len]
                 mask = mask.unsqueeze(1)
-                print(f"Masked scores shape3: {scores.shape}")
+                print(f"Masked scores shape3: {mask.shape}")
 
             scores = scores.masked_fill(mask, -torch.inf)
 
