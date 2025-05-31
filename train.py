@@ -39,16 +39,14 @@ class TransformerLRScheduler:
 
 
 def build_vocab(sentences, min_freq=2):
-    # Special tokens
     vocab = {"<pad>": 0, "<sos>": 1, "<eos>": 2, "<unk>": 3}
 
-    # Count word frequencies
     word_counts = Counter()
     for sentence in sentences:
         for word in sentence.split():
             word_counts[word] += 1
 
-    # Add words that appear at least min_freq times
+    #vocab creation
     idx = len(vocab)
     for word, count in word_counts.items():
         if count >= min_freq and word not in vocab:
@@ -102,7 +100,6 @@ def load_data():
         "quel âge avez-vous"
     ]
 
-    # Build vocabs
     src_vocab = build_vocab(train_src + val_src, min_freq=1)  # min_freq=1 for small dataset
     trg_vocab = build_vocab(train_trg + val_trg, min_freq=1)
 
@@ -110,10 +107,6 @@ def load_data():
     print(f"Target vocabulary size: {len(trg_vocab)}")
 
     return train_src, train_trg, val_src, val_trg, src_vocab, trg_vocab
-
-
-def create_padding_mask(seq, pad_idx=0):
-    return (seq == pad_idx)
 
 
 def train_epoch(model, iterator, optimizer, criterion, clip, lr_scheduler, device):
@@ -127,33 +120,36 @@ def train_epoch(model, iterator, optimizer, criterion, clip, lr_scheduler, devic
 
         optimizer.zero_grad()
 
-        # Create padding mask for source
-        src_mask = create_padding_mask(src)
-
         # Shift the target for teacher forcing
-        trg_input = trg[:, :-1]
-        trg_output = trg[:, 1:]
+        trg_input = trg[:, :-1]  # Input to decoder (exclude last token)
+        trg_output = trg[:, 1:]  # Expected output (exclude first token <sos>)
 
-        output = model(src, trg_input, mask=src_mask)
+        #forward pass
+        output = model(src, trg_input, mask=None)#as decoder creates causal_mask internally
 
+        #reshape for loss calc
         output_dim = output.shape[-1]
         output = output.contiguous().view(-1, output_dim)
         trg_output = trg_output.contiguous().view(-1)
 
+        #loss
         loss = criterion(output, trg_output)
 
-        #count non-padding tokens for loss scaling
+        # Count non-padding tokens for proper loss scaling
         non_pad_tokens = (trg_output != 0).sum().item()
         total_tokens += non_pad_tokens
 
+        #backward pass
         loss.backward()
 
         # Gradient clipping
         nn.utils.clip_grad_norm_(model.parameters(), clip)
 
+        #update params
         optimizer.step()
         lr_scheduler.step()
 
+        #loss
         epoch_loss += loss.item() * non_pad_tokens
 
         if i % 10 == 0:
@@ -173,19 +169,22 @@ def evaluate(model, iterator, criterion, device):
             src = src.to(device)
             trg = trg.to(device)
 
-            src_mask = create_padding_mask(src)
-
+            # Shift the target for teacher forcing
             trg_input = trg[:, :-1]
             trg_output = trg[:, 1:]
 
-            output = model(src, trg_input, mask=src_mask)
+            #forward pass
+            output = model(src, trg_input, mask=None)
 
+            # Reshape for loss calculation
             output_dim = output.shape[-1]
             output = output.contiguous().view(-1, output_dim)
             trg_output = trg_output.contiguous().view(-1)
 
+            #loss
             loss = criterion(output, trg_output)
 
+            # Count non-padding tokens
             non_pad_tokens = (trg_output != 0).sum().item()
             total_tokens += non_pad_tokens
             epoch_loss += loss.item() * non_pad_tokens
@@ -201,7 +200,6 @@ def epoch_time(start_time, end_time):
 
 
 def count_parameters(model):
-    """Count total and trainable parameters"""
     total_params = sum(p.numel() for p in model.parameters())
     trainable_params = sum(p.numel() for p in model.parameters() if p.requires_grad)
     return total_params, trainable_params
@@ -223,7 +221,6 @@ def main():
     device = torch.device('cuda' if torch.cuda.is_available() else 'cpu')
     print(f"Using device: {device}")
 
-    #model init
     model = Transformer(
         src_vocab_size=SRC_VOCAB_SIZE,
         trg_vocab_size=TRG_VOCAB_SIZE,
@@ -240,15 +237,17 @@ def main():
 
     optimizer = optim.Adam(
         model.parameters(),
-        lr=0,#handled by scheduler function
+        lr=0,  #set to 0 as it is updated by the scheduler
         betas=(ADAM_BETA1, ADAM_BETA2),
         eps=ADAM_EPSILON
     )
 
+    #learning rate scheduler
     lr_scheduler = TransformerLRScheduler(optimizer, D_MODEL, WARMUP_STEPS)
 
+    #loss function
     criterion = CrossEntropyLoss(
-        ignore_index=0,  #ign padding index
+        ignore_index=0,  # Ignore padding index
         label_smoothing=LABEL_SMOOTHING
     )
 
@@ -285,6 +284,7 @@ def main():
         end_time = time.time()
         epoch_mins, epoch_secs = epoch_time(start_time, end_time)
 
+        #save best model
         if valid_loss < best_valid_loss:
             best_valid_loss = valid_loss
             checkpoint = {
@@ -315,13 +315,14 @@ def main():
             train_ppl = float('inf')
             valid_ppl = float('inf')
 
+        # Print epoch res
         print(f'Epoch: {epoch+1:02} | Time: {epoch_mins}m {epoch_secs}s')
         print(f'\tTrain Loss: {train_loss:.4f} | Train PPL: {train_ppl:7.3f}')
         print(f'\t Val. Loss: {valid_loss:.4f} |  Val. PPL: {valid_ppl:7.3f}')
         print(f'\tCurrent LR: {optimizer.param_groups[0]["lr"]:.8f}')
         print("-" * 50)
 
-    print("Training completed\n")
+    print("Training completed!")
     print(f"Best validation loss: {best_valid_loss:.4f}")
 
 

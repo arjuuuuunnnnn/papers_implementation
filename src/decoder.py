@@ -38,7 +38,7 @@ class Decoder(nn.Module):
         self.dropout = nn.Dropout(dropout)
 
     def forward(self, x, encoder_output, mask=None):
-        mask = self.causal_mask(seq_len=x.size(1), device=x.device, batch_size=x.size(0)) if mask is None else mask
+        mask = self.causal_mask(seq_len=x.size(1), device=x.device) if mask is None else mask
         print(f"Decoder causal mask shape: {mask.shape}")
 
         x = self.pos_encoding(x)
@@ -49,9 +49,6 @@ class Decoder(nn.Module):
 
         return x
 
-    def causal_mask(self, seq_len, device, batch_size=None):
+    def causal_mask(self, seq_len, device):
         mask = torch.triu(torch.ones(seq_len, seq_len, device=device), diagonal=1).bool()
-        mask = mask.unsqueeze(0).unsqueeze(0) #(1, 1, seq_len, seq_len)
-        if batch_size is not None:
-            mask = mask.expand(batch_size, -1, -1, -1) #[batch, 1, seq_len, seq_len]
         return mask
