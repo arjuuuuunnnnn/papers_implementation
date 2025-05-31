@@ -7,7 +7,7 @@ import time
 from torch.utils.data import DataLoader
 
 from src.transformer import Transformer
-from .data_prep import TranslationDataset, collate_fn
+from data_prep import TranslationDataset
 
 
 SRC_VOCAB_SIZE = 10000
@@ -26,7 +26,6 @@ ADAM_EPSILON = 1e-9
 CLIP = 1.0
 
 
-
 class TransformerLRScheduler:
     def __init__(self, optimizer, d_model, warmup_steps):
         self.optimizer = optimizer
@@ -39,6 +38,16 @@ class TransformerLRScheduler:
         lrate = (self.d_model ** -0.5) * min(self.step_num ** -0.5, self.step_num * (self.warmup_steps ** -0.5))
         for param_group in self.optimizer.param_groups:
             param_group['lr'] = lrate
+
+
+def load_data():
+    """
+    Returns: train_src, train_trg, val_src, val_trg, src_vocab, trg_vocab
+    """
+    ...
+
+def create_padding_mask(seq, pad_idx=0):
+    return (seq == pad_idx)
 
 
 device = torch.device('cuda' if torch.cuda.is_available() else 'cpu')
