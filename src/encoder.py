@@ -1,10 +1,9 @@
 import torch.nn as nn
 
-import add_and_norm
-from positional_encoding import PositionalEncoding
-from multi_head_attention import MultiHeadAttention
-from add_and_norm import AddAndNorm
-from feed_forward import FeedForward
+from .positional_encoding import PositionalEncoding
+from .multi_head_attention import MultiHeadAttention
+from .add_and_norm import AddAndNorm
+from .feed_forward import FeedForward
 
 class EncoderLayer(nn.Module):
     def __init__(self, d_model=512, num_heads=8, dropout=0.1):

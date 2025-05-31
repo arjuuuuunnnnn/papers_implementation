@@ -1,10 +1,10 @@
 import torch
 import torch.nn as nn
 
-from positional_encoding import PositionalEncoding
-from multi_head_attention import MultiHeadAttention
-from add_and_norm import AddAndNorm
-from feed_forward import FeedForward
+from .positional_encoding import PositionalEncoding
+from .multi_head_attention import MultiHeadAttention
+from .add_and_norm import AddAndNorm
+from .feed_forward import FeedForward
 
 class DecoderLayer(nn.Module):
     def __init__(self, d_model=512, num_heads=8, dropout=0.1):
