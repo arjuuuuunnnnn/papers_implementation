@@ -10,6 +10,8 @@ class MultiHeadAttention(nn.Module):
         self.num_heads = num_heads
         self.head_dim = d_model // num_heads
 
+        assert d_model % num_heads == 0, "d_model must be divisible by num_heads"
+
         self.w_k = nn.Linear(d_model, d_model)
         self.w_q = nn.Linear(d_model, d_model)
         self.w_v = nn.Linear(d_model, d_model)
@@ -33,6 +35,11 @@ class MultiHeadAttention(nn.Module):
         scores = (q_h @ k_h.transpose(-2, -1)) / (self.head_dim)
 
         if mask is not None:
+            if mask.dim() == 2: # [seq_len, seq_len] -> [1, 1, seq_len, seq_len]
+                mask = mask.unsqueeze(0).unsqueeze(0)
+            elif mask.dim() == 3: # [batch_size, seq_len, seq_len] -> [batch_size, 1, seq_len, seq_len]
+                mask = mask.unsqueeze(1)
+
             scores = scores.masked_fill(mask, -torch.inf)
 
         attn_scores = F.softmax(scores, dim=-1)

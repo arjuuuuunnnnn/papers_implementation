@@ -38,7 +38,8 @@ class Decoder(nn.Module):
         self.dropout = nn.Dropout(dropout)
 
     def forward(self, x, encoder_output, mask=None):
-        mask = self.causal_mask(x.size(1))
+        mask = self.causal_mask(x.size(1), x.device) if mask is None else mask
+
         x = self.pos_encoding(x)
         x = self.dropout(x)
 
@@ -47,6 +48,6 @@ class Decoder(nn.Module):
 
         return x
 
-    def causal_mask(self, size):
-        mask = torch.triu(torch.ones(size, size), diagonal=1).bool()
+    def causal_mask(self, size, device):
+        mask = torch.triu(torch.ones(size, size, device=device), diagonal=1).bool()
         return mask
