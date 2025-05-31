@@ -1,7 +1,7 @@
 ## PyTorch implementation of Attention is all you need paper
 
 ### Usage
-1. Change the `load_data` function in train.py to load your own dataset, use any tokenizer you like(I have used a simple white-space tokenizer for simplicity).
+1. Change the `load_data` function in train.py to load your own dataset, use any tokenizer you prefer (I have used a simple white-space tokenizer for simplicity).
 
 2. Run the training script:
 ```bash
