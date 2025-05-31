@@ -4,8 +4,11 @@ from torch.nn import CrossEntropyLoss
 import math
 import torch.nn as nn
 import time
+from torch.utils.data import DataLoader
 
 from src.transformer import Transformer
+from .data_prep import TranslationDataset, collate_fn
+
 
 SRC_VOCAB_SIZE = 10000
 TRG_VOCAB_SIZE = 10000
@@ -64,10 +67,10 @@ criterion = CrossEntropyLoss(
 )
 
 # Initialize dataloaders
-# train_dataset = TranslationDataset(train_src, train_trg, src_vocab, trg_vocab)
-# val_dataset = TranslationDataset(val_src, val_trg, src_vocab, trg_vocab)
-# train_loader = DataLoader(train_dataset, batch_size=BATCH_SIZE, shuffle=True, collate_fn=collate_fn)
-# val_loader = DataLoader(val_dataset, batch_size=BATCH_SIZE, shuffle=False, collate_fn=collate_fn)
+train_dataset = TranslationDataset(train_src, train_trg, src_vocab, trg_vocab)
+val_dataset = TranslationDataset(val_src, val_trg, src_vocab, trg_vocab)
+train_loader = DataLoader(train_dataset, batch_size=BATCH_SIZE, shuffle=True, collate_fn=collate_fn)
+val_loader = DataLoader(val_dataset, batch_size=BATCH_SIZE, shuffle=False, collate_fn=collate_fn)
 
 def train(model, iterator, optimizer, criterion, clip, lr_scheduler):
     model.train()
