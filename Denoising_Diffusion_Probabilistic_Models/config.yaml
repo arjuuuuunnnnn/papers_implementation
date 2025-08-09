@@ -1,0 +1,26 @@
+training:
+  batch_size: 128
+  epochs: 20
+  learning_rate: 0.001
+  print_frequency: 400
+  device: "cpu"
+  save_dir: "checkpoints/"
+
+model:
+  image_channels: 3
+  time_embedding_dims: 128
+  sequence_channels: [64, 128, 256, 512, 1024]
+  labels: false
+
+diffusion:
+  timesteps: 1000
+  start_schedule: 0.001
+  end_schedule: 0.02
+
+data:
+  dataset_type: "custom"
+  dataset_path: "/home/admino/Diffusion/dataset"
+  image_size: [32, 32]
+  num_workers: 4
+
+
